@@ -2950,6 +2950,15 @@ body[data-theme="noche"] .regv2-btn{
   #zonesOpenCard .zones-legend .legend-chip{ pointer-events: auto; }
 </style>
 
+<style>
+#promoOverlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:2147483647;padding:16px 18px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.5);border:1px solid #333;color:#eee;min-width:280px}
+#promoCard h3{margin:0 0 10px;font:700 18px/1.2 system-ui,Segoe UI,Roboto,Arial}
+#promoChoices{display:flex;gap:10px;justify-content:center}
+#promoChoices button{background:#222;border:2px solid #666;border-radius:12px;padding:8px;cursor:pointer}
+#promoChoices button:hover{transform:translateY(-1px);border-color:#fff}
+#promoChoices img{width:56px;height:56px;display:block}
+#promoClose{margin-top:10px;text-align:center;opacity:.7;font-size:12px}
+</style>
 </head><body><div class="frame" data-fullscreen-root="" id="fsRoot"><div class="shell"><div aria-label="Barra superior" class="bar" id="topBar"><div class="mode-group" id="modeGroup"><button aria-expanded="false" aria-haspopup="true" class="btn" id="btnMode" type="button">Modo de juego</button><span aria-live="polite" class="mode-indicator" id="modeIndicator">Player vs player (local)</span></div><div aria-live="polite" class="bot-hud" id="botHUD" role="status"><div class="bot-hud-inner"><span id="botHUDText"></span></div></div><div aria-label="Elegir modo de juego" class="dropdown" id="modeDropdown" role="menu"><button class="btn dd-item" data-label="Versus Bot" data-mode="bot" style="position:static;" type="button">Player Vs Bot</button><button class="btn dd-item" data-label="Player vs player (local)" data-mode="pvp-local" style="position:static;" type="button">Player vs player (local)</button><button class="btn dd-item" data-label="Bot versus bot (demo)" data-mode="bot-vs-bot" style="position:static;" type="button">Bot versus bot (demo)</button><button class="btn dd-item" data-label="Modo Online" data-mode="online" style="position:static;" type="button">Modo Online</button></div></div><div style="height:var(--toolbar-gap)"></div><div class="board-wrap" id="boardWrap">
 <!-- Floating Replay FAB (centered over board) -->
 <div aria-label="Reproducir partida" id="rpFab" role="region" style="display:none">
@@ -3148,10 +3157,11 @@ body[data-theme="noche"] .regv2-btn{
 <img alt="PayPal" src="logo paypal.png"/>
 </a>
 </div>
-<button aria-controls="megaPanel" aria-expanded="false" class="btn" id="btnMegaMenu" type="button">Menú</button><div class="right-ctrls" id="rightControls"><button class="btn small" id="btnRestartBR" type="button">Reiniciar</button><button class="btn small" id="btnFSBR" type="button">Pantalla completa</button>
-<button id="btn-online-war" class="btn small" title="Jugar online (Modo Guerra)">Online</button>
-<div id="online-war-status" aria-live="polite" style="display:inline-block;margin-left:10px;padding:4px 10px;border-radius:12px;background:rgba(0,0,0,.7);color:#fff;border:1px solid #ffcc00;font-size:13px;line-height:1.1;max-width:50vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
-</div></div></div><script>
+<button aria-controls="megaPanel" aria-expanded="false" class="btn" id="btnMegaMenu" type="button">Menú</button><div class="right-ctrls" id="rightControls"><button class="btn small" id="btnRestartBR" type="button">Reiniciar</button><button class="btn small" id="btnFSBR" type="button">Pantalla completa</button><button id="btn-online-simple" class="btn small" title="Jugar online (simple)">Online</button>
+<div id="online-simple-status" aria-live="polite"
+     style="display:inline-block;margin-left:10px;padding:4px 10px;border-radius:12px;
+            background:rgba(0,0,0,.7);color:#fff;border:1px solid #ffcc00;
+            font-size:13px;line-height:1.1;max-width:50vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div></div></div></div><script>
 // --- Audio FX setup ---
 (function(){
   function make(src){ try{ const a = new Audio(src); a.preload='auto'; a.volume = 0.85; return a; }catch(_){ return null; } }
@@ -3186,8 +3196,8 @@ const SPRITE_PROBE = 'assets/piezas_aa/w_P.png';
 
 const EMPTY = null;
 const PIECE_SPRITES = {
-  w: {P:'assets/piezas_aa/w_P.png', R:'assets/piezas_aa/w_R.png', N:'assets/piezas_aa/w_N.png', B:'assets/piezas_aa/w_B.png', Q:'assets/piezas_aa/w_Q.png', K:'assets/piezas_aa/w_K.png',  G:'assets/piezas_aa/white_General.png', V:'assets/piezas_aa/white_Verdugo.png' ,M:'assets/piezas_aa/white_Mago.png',W:'assets/piezas_aa/white_Maga.png',J:'assets/piezas_aa/white_Bufon.png', A:'assets/piezas_aa/white_Arquero.png', S:'assets/piezas_aa/white_Guerrero.png'},
-  b: {P:'assets/piezas_aa/b_P.png', R:'assets/piezas_aa/b_R.png', N:'assets/piezas_aa/b_N.png', B:'assets/piezas_aa/b_B.png', Q:'assets/piezas_aa/b_Q.png', K:'assets/piezas_aa/b_K.png',  G:'assets/piezas_aa/black_General.png', V:'assets/piezas_aa/black_Verdugo.png' ,M:'assets/piezas_aa/black_Mago.png',W:'assets/piezas_aa/black_Maga.png',J:'assets/piezas_aa/black_Bufon.png', A:'assets/piezas_aa/black_Arquero.png', S:'assets/piezas_aa/black_Guerrero.png'}
+  w: { P:'assets/piezas_aa/w_P.png', R:'assets/piezas_aa/w_R.png', N:'assets/piezas_aa/w_N.png', B:'assets/piezas_aa/w_B.png', Q:'assets/piezas_aa/w_Q.png', K:'assets/piezas_aa/w_K.png' },
+  b: { P:'assets/piezas_aa/b_P.png', R:'assets/piezas_aa/b_R.png', N:'assets/piezas_aa/b_N.png', B:'assets/piezas_aa/b_B.png', Q:'assets/piezas_aa/b_Q.png', K:'assets/piezas_aa/b_K.png' }
 };
 const PIECES_UNICODE = { w:{P:'\\u2659',R:'\\u2656',N:'\\u2658',B:'\\u2657',Q:'\\u2655',K:'\\u2654'}, b:{P:'\\u265F',R:'\\u265C',N:'\\u265E',B:'\\u265D',Q:'\\u265B',K:'\\u265A'} };
 function makePiece(t,c){ return { type:t, color:c, hasMoved:false }; }
@@ -3197,18 +3207,14 @@ function makeInitialBoard16x8(){
   const back = ["R","N","B","Q","K","B","N","R"];
   const row = back.concat(back);
   for(let c=0;c<16;c++){
-    let backTypeB=row[c];
-    if(c<8){ if(backTypeB==='K') backTypeB='G'; else if(backTypeB==='Q') backTypeB='V'; else if(backTypeB==='B') backTypeB = (c===2?'M':(c===5?'W':backTypeB)); else if(backTypeB==='N') backTypeB = ((c===1||c===6)?'J':backTypeB); else if(backTypeB==='R') backTypeB = ((c===0||c===7)?'A':backTypeB); }
-    const pb = makePiece(backTypeB,'b');
-    const pn = makePiece('P','b'); const sn = makePiece('S','b');
-    if(c<8){ b[2][c] = pb; b[3][c] = sn; } else { b[0][c] = pb; b[1][c] = pn; }
+    const pb = makePiece(row[c],'b');
+    const pn = makePiece('P','b');
+    if(c<8){ b[2][c] = pb; b[3][c] = pn; } else { b[0][c] = pb; b[1][c] = pn; }
   }
   for(let c=0;c<16;c++){
-    let backTypeW=row[c];
-    if(c>=8){ if(backTypeW==='K') backTypeW='G'; else if(backTypeW==='Q') backTypeW='V'; else if(backTypeW==='B') backTypeW = (c===10?'M':(c===13?'W':backTypeW)); else if(backTypeW==='N') backTypeW = ((c===9||c===14)?'J':backTypeW); else if(backTypeW==='R') backTypeW = ((c===8||c===15)?'A':backTypeW); }
-    const pwb = makePiece(backTypeW,'w');
-    const pwp = makePiece('P','w'); const sw = makePiece('S','w');
-    if(c>=8){ b[5][c] = pwb; b[4][c] = sw; } else { b[7][c] = pwb; b[6][c] = pwp; }
+    const pwb = makePiece(row[c],'w');
+    const pwp = makePiece('P','w');
+    if(c>=8){ b[5][c] = pwb; b[4][c] = pwp; } else { b[7][c] = pwb; b[6][c] = pwp; }
   }
   return b;
 }
@@ -3251,101 +3257,7 @@ function pseudoMoves(vis, r, c){
         rr+=dr; cc+=dc;
       }
     }
-  } 
-  else if(p.type==='G'){
-    const dirs=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
-    const MAX=3;
-    for(const [dr,dc] of dirs){
-      let rr=r, cc=c; let hops=0;
-      for(let step=1; step<=MAX; step++){
-        rr+=dr; cc+=dc;
-        if(!inside(rr,cc)) break;
-        const t=vis[rr][cc];
-        if(!t){ out.push([rr,cc]); }
-        else {
-          if(t.color!==p.color) out.push([rr,cc]);
-          if(hops===0){ hops=1; continue; } else { break; }
-        }
-      }
-    }
-  }
-  else if(p.type==='V'){
-    const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
-    for(const [dr,dc] of dirs){
-      const rr=r+2*dr, cc=c+2*dc;
-      if(!inside(rr,cc)) continue;
-      const t=vis[rr][cc];
-      if(!t || t.color!==p.color) out.push([rr,cc]);
-    }
-  }
-
-  else if(p.type==='M' || p.type==='W'){
-    const dirs = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
-    for(const [dr,dc] of dirs){
-      const midr = r+dr, midc = c+dc;
-      const rr = r+2*dr, cc = c+2*dc;
-      if(!inside(rr,cc)) continue;
-      // no salto: intermedia libre
-      if(vis[midr][midc]) continue;
-      const t = vis[rr][cc];
-      if(!t || t.color!==p.color){ out.push([rr,cc]); }
-    }
-  }
-
-
-  else if(p.type==='J'){
-    const L = [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[-1,2],[1,-2],[-1,-2]];
-    for(const [dr,dc] of L){
-      const rr = r+dr, cc = c+dc;
-      if(!inside(rr,cc)) continue;
-      const t = vis[rr][cc];
-      if(!t){ out.push([rr,cc]); } // no captura
-    }
-  }
-
-  else if(p.type==='A'){
-    const dir = p.color==='w' ? -1 : 1;
-    const targets = [
-      [2*dir, 0], [4*dir, 0],         // hacia adelante 2 o 4
-      [2*dir, 2], [2*dir, -2],        // diagonales a 2
-      [4*dir, 4], [4*dir, -4],        // diagonales a 4
-    ];
-    for(const [dr,dc] of targets){
-      const rr = r + dr, cc = c + dc;
-      if(!inside(rr,cc)) continue;
-      const t = vis[rr][cc];
-      if(!t || t.color!==p.color){ out.push([rr,cc]); }
-    }
-  }
-
-  else if(p.type==='S'){
-    const dir = (p.color==='w') ? -1 : 1;
-    if(p.veteran){
-      // Puede mover/capturar 1 en 8 direcciones
-      const dirs = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
-      for(const [dr,dc] of dirs){
-        const rr=r+dr, cc=c+dc;
-        if(!inside(rr,cc)) continue;
-        const t=vis[rr][cc];
-        if(!t || t.color!==p.color) out.push([rr,cc]);
-      }
-    }else{
-      // Mover 1 hacia adelante si vacío
-      const fr=r+dir, fc=c;
-      if(inside(fr,fc) && !vis[fr][fc]) out.push([fr,fc]);
-      // Capturar 1 hacia adelante (si hay enemigo)
-      if(inside(fr,fc) && vis[fr][fc] && vis[fr][fc].color!==p.color) out.push([fr,fc]);
-      // Capturar 1 en diagonales hacia adelante (si hay enemigo)
-      for(const dc of [-1,1]){
-        const rr=r+dir, cc=c+dc;
-        if(!inside(rr,cc)) continue;
-        const t=vis[rr][cc];
-        if(t && t.color!==p.color) out.push([rr,cc]);
-      }
-    }
-  }
-
-else if(p.type==='P'){
+  } else if(p.type==='P'){
     const dir = p.color==='w' ? -1 : 1;
     const r1 = r + dir;
     if(inside(r1,c) && !vis[r1][c]) out.push([r1,c]);
@@ -3396,69 +3308,6 @@ function applyMove(board, offs, from, to, special){
     copy[special.rookTo.r][rtBC] = { ...copy[special.rookFrom.r][rfBC], hasMoved:true };
     copy[special.rookFrom.r][rfBC] = EMPTY;
   }
-  // Transformación de Mago/Maga al capturar (excepto Rey)
-  if(moved && (moved.type==='M' || moved.type==='W') && captured && captured.type!=='K'){
-    copy[to.r][toBC] = { type: captured.type, color: moved.color, hasMoved: true };
-  }
-
-  // === Bufón (J): "entretener" piezas rivales adyacentes 2 turnos ===
-  // Inicializar freeze arrays
-  for(let rr=0; rr<copy.length; rr++){
-    for(let cc=0; cc<copy[rr].length; cc++){
-      const pc = copy[rr][cc];
-      if(pc && !pc.freeze){ pc.freeze = []; }
-    }
-  }
-  // Si el capturado es un Bufón, eliminar efectos desde su casilla
-  if(captured && captured.type==='J'){
-    const adj = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
-    for(const [dr,dc] of adj){
-      const ar = to.r+dr, ac = toBC+dc;
-      if(!inside(ar,ac)) continue;
-      const pc = copy[ar][ac];
-      if(pc && pc.freeze && pc.freeze.length){
-        pc.freeze = pc.freeze.filter(f => !(f.kind==='J' && f.srcR===to.r && f.srcC===toBC));
-      }
-    }
-  }
-  // Si se movió un Bufón, aplicar/renovar 2 turnos a rivales adyacentes
-  if(moved && moved.type==='J'){
-    const opp = moved.color==='w' ? 'b' : 'w';
-    const adj = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
-    for(const [dr,dc] of adj){
-      const ar = to.r+dr, ac = toBC+dc;
-      if(!inside(ar,ac)) continue;
-      const pc = copy[ar][ac];
-      if(pc && pc.color===opp){
-        if(!pc.freeze) pc.freeze = [];
-        const old = pc.freeze.find(f => f.kind==='J' && f.srcR===to.r && f.srcC===toBC);
-        if(old) old.turns = 2; else pc.freeze.push({kind:'J', srcR:to.r, srcC:toBC, turns:2});
-      }
-    }
-  }
-  // Reducir en 1 los turns de quien acaba de mover
-  const justMoved = moved ? moved.color : null;
-  if(justMoved){
-    for(let rr=0; rr<copy.length; rr++){
-      for(let cc=0; cc<copy[rr].length; cc++){
-        const pc = copy[rr][cc];
-        if(pc && pc.color===justMoved && pc.freeze && pc.freeze.length){
-          for(const f of pc.freeze){ if(f.turns>0) f.turns--; }
-          pc.freeze = pc.freeze.filter(f => f.turns>0);
-        }
-      }
-    }
-  }
-  // Guerrero 'S': al llegar a la última fila rival, gana 'veteran'
-  if(moved && moved.type==='S'){
-    const endRow = (moved.color==='w') ? 0 : (copy.length-1);
-    if(to.r === endRow){
-      const gx = copy[to.r][toBC];
-      if(gx){ gx.veteran = true; gx.hasMoved = true; } gx.__justVeteran = true;
-    }
-  }
-
-
   return { board: copy, captured, movedPiece: copy[to.r][toBC] };
 }
 function legalMovesFor(vis, board, offs, r, c, color, epTarget){
@@ -3830,14 +3679,14 @@ if (candidates && candidates.length) {
   const mover = vis[sel.r][sel.c];
   const promoCand = candidates.filter(mv => mv[2] && mv[2].promotion);
   if (mover && mover.type==='P' && promoCand.length > 0) {
-    showPromotionDialog(mover.color, function(choice){
-      if(!choice) return;
-      var chosen = promoCand.find(mv => mv[2] && mv[2].promotion===choice) || promoCand[0];
-      playMove(sel, {r, c}, chosen[2]||null, chosen[3]||false);
-    });
-    return;
-  }
-  const next = candidates[0];
+  showPromotionDialog(mover.color, function(choice){
+    if(!choice) return;
+    var chosen = promoCand.find(mv => mv[2] && mv[2].promotion===choice) || promoCand[0];
+    playMove(sel, {r, c}, chosen[2]||null, chosen[3]||false);
+  });
+  return;
+}
+const next = candidates[0];
   playMove(sel, {r, c}, next[2]||null, next[3]||false);
   return;
 }
@@ -3853,7 +3702,6 @@ if (candidates && candidates.length) {
   }
 
   const p = vis[r][c];
-  if(p && p.freeze && p.freeze.reduce((s,f)=>s+(f.turns||0),0)>0){ return; }
   if(p && p.color === turn){
     sel = { r, c };
     moves = legalMovesFor(vis, board, offsets, r, c, turn, epTarget);
@@ -3874,7 +3722,6 @@ function playMove(from, to, special, capturesKing){
   }
 
   board = newBoard;
-  try{ if(res && res.movedPiece && res.movedPiece.type==='S' && res.movedPiece.__justVeteran){ showVeteranBanner(res.movedPiece.color); } }catch(_){}
   sel = null; moves = [];
   try{ if(res && res.captured){ window.__SND__ && __SND__.play('capture'); } else { window.__SND__ && __SND__.play('move'); } }catch(_){}
 
@@ -5984,8 +5831,8 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
       if(!color && piece.side==='black') color='b';
     }
     if(!t) return {glyph:'', col:'#222'};
-    var mapW = {p:'♙', r:'♖', n:'♘', b:'♗', q:'♕', k:'♔', m:'♗', w:'♗', j:'♘', a:'♖', s:'♙'};
-    var mapB = {p:'♟', r:'♜', n:'♞', b:'♝', q:'♛', k:'♚', m:'♝', w:'♝', j:'♞', a:'♜', s:'♟'};
+    var mapW = {p:'♙', r:'♖', n:'♘', b:'♗', q:'♕', k:'♔'};
+    var mapB = {p:'♟', r:'♜', n:'♞', b:'♝', q:'♛', k:'♚'};
     t = (''+t).toLowerCase();
     var glyph = (color==='w')? (mapW[t]||'') : (mapB[t]||'');
     return {glyph:glyph, col: (color==='w')?'#111':'#111'};
@@ -12491,14 +12338,14 @@ function showToast(){
 </script>
 
 <script>
-// === Enrutador de versiones (selector del panel) — modo actual: guerra ===
+// === Enrutador de versiones (selector del panel) — modo actual: simple ===
 (function(){
   var ROUTE = {
     '3_0_simple':  'ajetrez_modo_simple.html',
     '3_0_amenaza': 'ajetrez_modo_amenaza.html',
     '3_0_guerra':  'ajetrez_modo_guerra.html'
   };
-  var CURRENT = '3_0_guerra';
+  var CURRENT = '3_0_simple';
   function hasGameInProgress(){
     try{ return ((window.moves&&window.moves.length>0) || (window.__AJ_CURRENT_GAME__ && (window.__AJ_CURRENT_GAME__.script||[]).length>0)) && !window.gameOver; }catch(_){
       return false;
@@ -12518,223 +12365,6 @@ function showToast(){
     if(sel.value !== CURRENT) { sel.value = CURRENT; try{ window.ajSyncVersionLabel && window.ajSyncVersionLabel(); }catch(_){ } }
     sel.addEventListener('change', function(e){ navigate(sel.value, e); }, true);
   });
-})();
-</script>
-
-<script>
-// === Reglas unificadas (selector "Reglas del juego") ===
-(function(){
-  function el(id){ return document.getElementById(id); }
-  var amen = `<div class="rules-block">
-  <h2>Ajetrez 3.0 — Modo Amenaza (Príncipe &amp; Princesa)</h2>
-  <h3>1) Objetivo</h3>
-  <ul>
-    <li><strong>Jaque mate</strong> al rey rival (clásico).</li>
-    <li><strong>Liberación:</strong> si al <em>terminar tu jugada</em> cualquier pieza propia queda en una casilla <strong>adyacente</strong> (8 direcciones) a <strong>tu</strong> Príncipe <em>o</em> Princesa, ganás de inmediato. Si hay mate y liberación en la misma jugada, prima la <strong>liberación</strong>.</li>
-  </ul>
-  <h3>2) Preparación y colocación</h3>
-  <ul>
-    <li>Tablero con un sector central 8×8 y secciones laterales por lado.</li>
-    <li>En laterales, las piezas que eran Rey/Reina se reemplazan por <strong>Príncipe (I)</strong> y <strong>Princesa (S)</strong>.</li>
-    <li><strong>Rehenes en territorio enemigo:</strong> en el lateral <em>blanco</em> están I/S <em>negros</em>; en el lateral <em>negro</em>, I/S <em>blancos</em>.</li>
-  </ul>
-  <h3>3) Comportamiento de I/S</h3>
-  <ul>
-    <li><strong>Inmóviles</strong>: no se mueven en toda la partida.</li>
-    <li><strong>No capturables</strong>: no puede ocuparse ni capturarse su casilla (intento ilegal).</li>
-    <li><strong>No atacan</strong> y <strong>bloquean</strong> su casilla como pieza propia (el caballo puede saltar).</li>
-  </ul>
-  <h3>4) Liberación (detalle operativo)</h3>
-  <ul>
-    <li>Se evalúa <strong>al terminar cada jugada</strong>.</li>
-    <li>Si la jugada permite <em>desplazar sección</em> luego de una captura, la liberación solo cuenta si <strong>la pieza que moviste</strong> termina adyacente a tu I/S.</li>
-    <li>Alcanza con quedar junto a <em>I</em> o <em>S</em> (uno de los dos). Estar junto a los rehenes rivales no hace nada.</li>
-  </ul>
-  <h3>5) Resto de reglas</h3>
-  <ul>
-    <li>Resto de piezas = ajedrez estándar: capturas, jaque, jaque mate, tablas, promoción, enroque, en passant, etc. (salvo I/S).</li>
-    <li>No se puede promocionar a Príncipe/Princesa.</li>
-  </ul>
-  <h3>6) Interfaz</h3>
-  <ul>
-    <li>Al liberar: aviso <em>“Príncipe y princesa liberados. ¡Haz ganado la partida!”</em>, suena el mismo audio que en mate y el botón <em>Reiniciar</em> se muestra en rojo.</li>
-  </ul>
-</div>`;
-  function setup(){
-    var sel = el('selRulesVersion') || el('selRules');
-    var box = el('rulesContent') || el('rulesPanel') || el('panelReglas');
-    if(!sel || !box) return;
-    // Guardamos el contenido original como "simple" (fallback)
-    var original = box.innerHTML;
-    var MAP = {
-      '3_0_simple': original,
-      '3_0_amenaza': amen,
-      '3_0_guerra': '<p><strong>Modo guerra</strong>: próximamente.</p>'
-    };
-    function apply(){
-      var v = sel.value;
-      if(!MAP[v]) v = '3_0_simple';
-      box.innerHTML = MAP[v];
-    }
-    sel.addEventListener('change', apply);
-    // Si ya está seleccionada Amenaza en este HTML, aplicamos
-    apply();
-  }
-  document.addEventListener('DOMContentLoaded', setup);
-})();
-</script>
-
-<style>
-#promoOverlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999}
-#promoCard{background:#111;padding:16px 18px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.5);border:1px solid #333;color:#eee;min-width:280px}
-#promoCard h3{margin:0 0 10px;font:700 18px/1.2 system-ui,Segoe UI,Roboto,Arial}
-#promoChoices{display:flex;gap:10px;justify-content:center}
-#promoChoices button{background:#222;border:2px solid #666;border-radius:12px;padding:8px;cursor:pointer}
-#promoChoices button:hover{transform:translateY(-1px);border-color:#fff}
-#promoChoices img{width:56px;height:56px;display:block}
-#promoClose{margin-top:10px;text-align:center;opacity:.7;font-size:12px}
-</style>
-<div id="promoOverlay" role="dialog" aria-modal="true" aria-label="Elegir pieza de promoción">
-  <div id="promoCard">
-    <h3>Elegí pieza de promoción</h3>
-    <div id="promoChoices"></div>
-    <div id="promoClose">Esc o click afuera para cancelar</div>
-  </div>
-</div>
-<script>
-function showPromotionDialog(color, onChoose){
-  try{
-    const overlay = document.getElementById('promoOverlay');
-    /*promoFSRootPatch*/try{var __fsroot=document.fullscreenElement||document.getElementById('fsRoot')||document.body;if(overlay&&overlay.parentElement!==__fsroot){__fsroot.appendChild(overlay);}}catch(_){}const cont = document.getElementById('promoChoices');
-    cont.innerHTML='';
-    const order = ['Q','R','B','N'];
-    order.forEach(function(t){
-      const btn = document.createElement('button');
-      const img = document.createElement('img');
-      let url = null;
-      try{ url = PIECE_SPRITES[color] && PIECE_SPRITES[color][t]; }catch(_){}
-      if(!url){
-        // fallback unicode
-        const map = {w:{Q:'♕',R:'♖',B:'♗',N:'♘'}, b:{Q:'♛',R:'♜',B:'♝',N:'♞'}};
-        btn.textContent = (map[color]||map.w)[t];
-        btn.style.fontSize='40px';
-        btn.style.lineHeight='48px';
-      }else{
-        img.src = url; btn.appendChild(img);
-      }
-      btn.addEventListener('click', function(){
-        overlay.style.display='none';
-        onChoose && onChoose(t);
-      });
-      cont.appendChild(btn);
-    });
-    function close(){ overlay.style.display='none'; onChoose && onChoose(null); }
-    overlay.style.display='flex';
-    overlay.addEventListener('click', function(ev){ if(ev.target===overlay) close(); }, {once:true});
-    document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc); } });
-  }catch(e){ console.error(e); onChoose && onChoose('Q'); }
-}
-
-function showVeteranBanner(color){
-  try{
-    const overlay = document.getElementById('promoOverlay');
-    const cont = document.getElementById('promoChoices');
-    const holder = document.getElementById('promoHolder') || cont.parentElement;
-    cont.innerHTML='';
-    // Simple message card
-    const card = document.createElement('div');
-    card.style.display='flex';
-    card.style.flexDirection='column';
-    card.style.alignItems='center';
-    card.style.gap='10px';
-    const msg = document.createElement('div');
-    msg.style.fontSize='1rem';
-    msg.style.textAlign='center';
-    msg.style.color='#eee';
-    msg.innerHTML = '¡Tu <b>Guerrero</b> se convirtió en <b>Veterano</b>!<br>Ahora puede mover y capturar 1 casillero en todas las direcciones.';
-    const ok = document.createElement('button');
-    ok.textContent = 'Entendido';
-    ok.style.padding='8px 16px';
-    ok.style.fontWeight='700';
-    ok.onclick = function(){ overlay.style.display='none'; };
-    card.appendChild(msg);
-    card.appendChild(ok);
-    cont.appendChild(card);
-    overlay.style.display='flex';
-  }catch(_){ /* ignore */ }
-}
-
-</script>
-
-<!-- === Reglas unificadas + estilo consistente === -->
-
-<style id="rules-block-style">
-.rules-block{font:16px/1.55 system-ui, Segoe UI, Roboto, Arial, sans-serif; color:#eaeaea}
-.rules-block h2{font-size:22px; line-height:1.25; margin:0 0 8px}
-.rules-block h3{font-size:18px; line-height:1.3; margin:12px 0 6px}
-.rules-block p, .rules-block li{font-size:16px}
-.rules-block ul{margin:6px 0 10px 18px}
-</style>
-
-<script>
-(function(){
-  function el(id){ return document.getElementById(id); }
-  var amen = `<div class="rules-block">
-  <h2>Ajetrez 3.0 — Modo Amenaza (Príncipe &amp; Princesa)</h2>
-  <h3>1) Objetivo</h3>
-  <ul>
-    <li><strong>Jaque mate</strong> al rey rival (clásico).</li>
-    <li><strong>Liberación:</strong> si al <em>terminar tu jugada</em> cualquier pieza propia queda en una casilla <strong>adyacente</strong> (8 direcciones) a <strong>tu</strong> Príncipe <em>o</em> Princesa, ganás de inmediato. Si hay mate y liberación en la misma jugada, prima la <strong>liberación</strong>.</li>
-  </ul>
-  <h3>2) Preparación y colocación</h3>
-  <ul>
-    <li>Tablero con un sector central 8×8 y secciones laterales por lado.</li>
-    <li>En laterales, las piezas que eran Rey/Reina se reemplazan por <strong>Príncipe (I)</strong> y <strong>Princesa (S)</strong>.</li>
-    <li><strong>Rehenes en territorio enemigo:</strong> en el lateral <em>blanco</em> están I/S <em>negros</em>; en el lateral <em>negro</em>, I/S <em>blancos</em>.</li>
-  </ul>
-  <h3>3) Comportamiento de I/S</h3>
-  <ul>
-    <li><strong>Inmóviles</strong>: no se mueven en toda la partida.</li>
-    <li><strong>No capturables</strong>: no puede ocuparse ni capturarse su casilla (intento ilegal).</li>
-    <li><strong>No atacan</strong> y <strong>bloquean</strong> su casilla como pieza propia (el caballo puede saltar).</li>
-  </ul>
-  <h3>4) Liberación (detalle operativo)</h3>
-  <ul>
-    <li>Se evalúa <strong>al terminar cada jugada</strong>.</li>
-    <li>Si la jugada permite <em>desplazar sección</em> luego de una captura, la liberación solo cuenta si <strong>la pieza que moviste</strong> termina adyacente a tu I/S.</li>
-    <li>Alcanza con quedar junto a <em>I</em> o <em>S</em> (uno de los dos). Estar junto a los rehenes rivales no hace nada.</li>
-  </ul>
-  <h3>5) Resto de reglas</h3>
-  <ul>
-    <li>Resto de piezas = ajedrez estándar: capturas, jaque, jaque mate, tablas, promoción, enroque, en passant, etc. (salvo I/S).</li>
-    <li>No se puede promocionar a Príncipe/Princesa.</li>
-  </ul>
-  <h3>6) Interfaz</h3>
-  <ul>
-    <li>Al liberar: aviso <em>“Príncipe y princesa liberados. ¡Haz ganado la partida!”</em>, suena el mismo audio que en mate y el botón <em>Reiniciar</em> se muestra en rojo.</li>
-  </ul>
-</div>`;
-  function setup(){
-    var sel = el('selRulesVersion') || el('selRules');
-    var box = el('rulesContent') || el('rulesPanel') || el('panelReglas');
-    if(!sel || !box) return;
-    // original como HTML y envuelto para tamaño/estilo consistente
-    var original = box.innerHTML;
-    var simpleWrapped = '<div class="rules-block">' + original + '</div>';
-    var MAP = {
-      '3_0_simple': simpleWrapped,
-      '3_0_amenaza': amen,
-      '3_0_guerra': '<div class="rules-block"><p><strong>Modo guerra</strong>: próximamente.</p></div>'
-    };
-    function apply(){
-      var v = sel.value;
-      if(!MAP[v]) v = '3_0_simple';
-      box.innerHTML = MAP[v];
-    }
-    sel.addEventListener('change', apply);
-    apply();
-  }
-  document.addEventListener('DOMContentLoaded', setup);
 })();
 </script>
 
@@ -12952,7 +12582,78 @@ function showVeteranBanner(color){
 
   console.log('[AJ] Option C activada: 3 perfiles + libro + variación.');
 })();
-</script><style id="hide-rotate-overlays">
+</script><div id="promoOverlay" role="dialog" aria-modal="true" aria-label="Elegir pieza de promoción">
+  <div id="promoCard">
+    <h3>Elegí pieza de promoción</h3>
+    <div id="promoChoices"></div>
+    <div id="promoClose">Esc o click afuera para cancelar</div>
+  </div>
+</div>
+<script>
+function showPromotionDialog(color, onChoose){
+  try{
+    const overlay = document.getElementById('promoOverlay');try{var __fsroot = document.fullscreenElement || document.getElementById('fsRoot') || document.body;if(overlay && overlay.parentElement !== __fsroot){ __fsroot.appendChild(overlay); }}catch(_){ }
+    const cont = document.getElementById('promoChoices');
+    cont.innerHTML='';
+    const order = ['Q','R','B','N'];
+    order.forEach(function(t){
+      const btn = document.createElement('button');
+      const img = document.createElement('img');
+      let url = null;
+      try{ url = PIECE_SPRITES[color] && PIECE_SPRITES[color][t]; }catch(_){}
+      if(!url){
+        // fallback unicode
+        const map = {w:{Q:'♕',R:'♖',B:'♗',N:'♘'}, b:{Q:'♛',R:'♜',B:'♝',N:'♞'}};
+        btn.textContent = (map[color]||map.w)[t];
+        btn.style.fontSize='40px';
+        btn.style.lineHeight='48px';
+      }else{
+        img.src = url; btn.appendChild(img);
+      }
+      btn.addEventListener('click', function(){
+        overlay.style.display='none';
+        onChoose && onChoose(t);
+      });
+      cont.appendChild(btn);
+    });
+    function close(){ overlay.style.display='none'; onChoose && onChoose(null); }
+    overlay.style.display='flex';
+    overlay.addEventListener('click', function(ev){ if(ev.target===overlay) close(); }, {once:true});
+    document.addEventListener('keydown', function esc(e){ if(e.key==='Escape'){ close(); document.removeEventListener('keydown', esc); } });
+  }catch(e){ console.error(e); onChoose && onChoose('Q'); }
+}
+
+function showVeteranBanner(color){
+  try{
+    const overlay = document.getElementById('promoOverlay');
+    const cont = document.getElementById('promoChoices');
+    const holder = document.getElementById('promoHolder') || cont.parentElement;
+    cont.innerHTML='';
+    // Simple message card
+    const card = document.createElement('div');
+    card.style.display='flex';
+    card.style.flexDirection='column';
+    card.style.alignItems='center';
+    card.style.gap='10px';
+    const msg = document.createElement('div');
+    msg.style.fontSize='1rem';
+    msg.style.textAlign='center';
+    msg.style.color='#eee';
+    msg.innerHTML = '¡Tu <b>Guerrero</b> se convirtió en <b>Veterano</b>!<br>Ahora puede mover y capturar 1 casillero en todas las direcciones.';
+    const ok = document.createElement('button');
+    ok.textContent = 'Entendido';
+    ok.style.padding='8px 16px';
+    ok.style.fontWeight='700';
+    ok.onclick = function(){ overlay.style.display='none'; };
+    card.appendChild(msg);
+    card.appendChild(ok);
+    cont.appendChild(card);
+    overlay.style.display='flex';
+  }catch(_){ /* ignore */ }
+}
+
+</script>
+<style id="hide-rotate-overlays">
   /* Forzar oculto cualquier cartel de rotación/orientación, sin afectar elementos normales */
   [id*="rotate-overlay"], [class*="rotate-overlay"],
   [id*="rotateNotice"], [class*="rotateNotice"],
@@ -13139,37 +12840,30 @@ function showVeteranBanner(color){
 })();
 </script>
 
-
 <script type="module">
-  // HARDENED: lazy init on click, muestra estado, y evita que un error bloquee el botón.
-  const BTN_ID = 'btn-online-war';
-  const STATUS_ID = 'online-war-status';
-  const SUPABASE_URL = 'https://unyomyoojfjatxrcknqu.supabase.co';   // ← reemplazar
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVueW9teW9vamZqYXR4cmNrbnF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzNjQyNTgsImV4cCI6MjA3Mzk0MDI1OH0.ob5n4Ae7UecIQ7K4IlYMkxOgoDgZxg2VcgTFwKHOgsA';                 // ← reemplazar
+  const VARIANT = 'simple';
+  const SUPABASE_URL = 'https://unyomyoojfjatxrcknqu.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVueW9teW9vamZqYXR4cmNrbnF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgzNjQyNTgsImV4cCI6MjA3Mzk0MDI1OH0.ob5n4Ae7UecIQ7K4IlYMkxOgoDgZxg2VcgTFwKHOgsA';
+  const BTN_ID = 'btn-online-simple';
+  const STATUS_ID = 'online-simple-status';
 
   const $btn = document.getElementById(BTN_ID);
   const $status = document.getElementById(STATUS_ID);
-  const setStatus = (t) => { if ($status) { $status.textContent = t; $status.title = t; $status.style.display='inline-block'; } console.log('[online-war]', t); };
+  const setStatus = (t) => { if ($status) { $status.textContent = t; $status.title = t; $status.style.display='inline-block'; } console.log('[online-'+VARIANT+']', t); };
 
   let online = null;
   async function ensureOnline() {
     if (online) return online;
-
-    if (!SUPABASE_URL.startsWith('https://') || SUPABASE_URL.includes('TU-PROJECT') || SUPABASE_ANON_KEY.includes('TU-ANON-KEY')) {
-      setStatus('⚠️ Falta configurar Supabase URL/Anon Key en este HTML.');
-      throw new Error('Missing Supabase keys');
-    }
-
     try {
-      const mod = await import('web/online.js');
-      const { initOnline } = mod;
-      online = await initOnline({
+      const mod = await import('/web/online.js');
+      setStatus('✅ Cliente cargado. Conectando…');
+      online = await mod.initOnline({
         supabaseUrl: SUPABASE_URL,
         supabaseAnonKey: SUPABASE_ANON_KEY,
-        variant: 'guerra',
-        getLocalState: () => window.Ajetrez?.exportState?.() ?? {},
-        applyRemoteEvent: (ev) => { try { window.Ajetrez?.applyEvent?.(ev); } catch(e) { console.error(e); } },
-        onStatus: (s) => setStatus(`${s.type}`)
+        variant: VARIANT,
+        getLocalState: () => window.Ajetrez?.exportState?.() ?? {},   // tu motor
+        applyRemoteEvent: (ev) => { try { window.Ajetrez?.applyEvent?.(ev) } catch(e) { console.error(e) } },
+        onStatus: (s) => setStatus(s.type)
       });
       setStatus('✅ Conectado (auth ok).');
       return online;
@@ -13187,15 +12881,15 @@ function showVeteranBanner(color){
         const g = await svc.quickMatch();
         await svc.subscribeToGame(g.id);
         setStatus(`🎮 Partida ${g.code} — ${g.status}`);
-      } catch (e) {}
+      } catch (e) { /* ya logueado arriba */ }
     });
   }
 
+  // Hooks que tu motor debe llamar tras validar la acción local
   window.onLocalMove = (move) => online?.send({ kind: 'move', payload: move });
   window.onSectionShift = (shift) => online?.send({ kind: 'shift', payload: shift });
   window.onPromote = (prom) => online?.send({ kind: 'promote', payload: prom });
 </script>
-
 </body>
 <!-- AJETREZ: Overlay de reproducción (bloqueo del tablero) v2 -->
 <style id="aj-replay-glass-css">
@@ -13999,3 +13693,26 @@ function showVeteranBanner(color){
   }
 })();
 </script>
+
+
+<style id="aj-zones-float-css-2025-09-13-height-plus30">
+  /* Aumentar ~30% la altura del panel flotante de brillo/opacidad (solo altura) */
+  /* Basado en la regla previa que usaba: height = ((100vh - 6mm)/4) * 0.85 */
+  /* 0.85 * 1.30 = 0.27625 => ~27.625% del viewport disponible (restando 6mm) */
+  #zonesFloat.zf-top{
+    height: calc((100vh - 6mm) * 0.27625) !important;
+    max-height: calc((100vh - 6mm) * 0.27625) !important;
+  }
+</style>
+
+
+<style id="aj-zones-float-css-2025-09-13-width-20-height-plus20">
+  /* Panel de Personalización: hacer más angosto (~20%) y aumentar altura (~20%) */
+  /* Altura previa: (100vh - 6mm) * 0.27625  => nueva = * 1.20 = 0.3315 */
+  #zonesFloat.zf-top{
+    height: calc((100vh - 6mm) * 0.3315) !important;
+    max-height: calc((100vh - 6mm) * 0.3315) !important;
+    transform-origin: top center;
+    transform: scaleX(0.8); /* 20% más angosto */
+  }
+</style>
