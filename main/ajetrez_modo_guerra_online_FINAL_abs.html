@@ -13161,7 +13161,7 @@ function showVeteranBanner(color){
     }
 
     try {
-      const mod = await import('/web/online.js');
+      const mod = await import('./web/online.js');
       const { initOnline } = mod;
       online = await initOnline({
         supabaseUrl: SUPABASE_URL,
