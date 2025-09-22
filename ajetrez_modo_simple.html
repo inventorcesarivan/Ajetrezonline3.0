@@ -12855,7 +12855,7 @@ function showVeteranBanner(color){
   async function ensureOnline() {
     if (online) return online;
     try {
-      const mod = await import('/web/online.js');
+      const mod = await import('./web/online.js');
       setStatus('✅ Cliente cargado. Conectando…');
       online = await mod.initOnline({
         supabaseUrl: SUPABASE_URL,

@@ -1,0 +1,82 @@
+Ajetrez Online — Automated Fix Report
+============================================================
+
+Detected root: /mnt/data/project_scan/Ajetrezonline3.0-main
+Total HTML files: 13
+Total JS files: 10
+online.js candidates: ['/mnt/data/project_fixed/main/web/online.js', '/mnt/data/project_fixed/web/online.js']
+
+Changes applied:
+- ajetrez_modo_amenaza.html
+    * Dynamic import spec '/web/online.js' -> './main/web/online.js'
+- ajetrez_modo_guerra.html
+    * Dynamic import spec '/web/online.js' -> './main/web/online.js'
+- ajetrez_modo_simple.html
+    * Dynamic import spec '/web/online.js' -> './main/web/online.js'
+- main/ajetrez_modo_amenaza_online_FINAL_abs.html
+    * Dynamic import spec '/web/online.js' -> './web/online.js'
+- main/ajetrez_modo_guerra_online_FINAL_abs.html
+    * Dynamic import spec '/web/online.js' -> './web/online.js'
+- main/ajetrez_modo_simple_online_FINAL_abs.html
+    * Dynamic import spec '/web/online.js' -> './web/online.js'
+
+Remaining suspect references to old repo folder names:
+  main/index.html:25 contains 'AjetrezFinal3\.0-main'
+  main/index.html:26 contains 'AjetrezFinal3\.0-main'
+  main/index.html:27 contains 'AjetrezFinal3\.0-main'
+  main/index.html:31 contains 'AjetrezFinal3\.0-main'
+  main/index.html:32 contains 'AjetrezFinal3\.0-main'
+  main/index.html:33 contains 'AjetrezFinal3\.0-main'
+  main/index.html:38 contains 'AjetrezFinal3\.0-main'
+
+Files referencing 'supabase':
+  - ajetrez_modo_amenaza.html
+  - ajetrez_modo_amenaza_online_FINAL_abs.html
+  - ajetrez_modo_guerra.html
+  - ajetrez_modo_guerra_online_FINAL_abs.html
+  - ajetrez_modo_simple.html
+  - ajetrez_modo_simple_online_FINAL_abs.html
+  - main/ajetrez_modo_amenaza_online_FINAL_abs.html
+  - main/ajetrez_modo_guerra_online_FINAL_abs.html
+  - main/ajetrez_modo_simple_online_FINAL_abs.html
+  - main/web/online.js
+  - main/web/online_attach_amenaza.js
+  - main/web/online_attach_simple.js
+  - web/online.js
+  - web/online_attach_amenaza.js
+  - web/online_attach_simple.js
+
+Files using dynamic import(...):
+  - ajetrez_modo_amenaza.html
+  - ajetrez_modo_amenaza_online_FINAL_abs.html
+  - ajetrez_modo_guerra.html
+  - ajetrez_modo_guerra_online_FINAL_abs.html
+  - ajetrez_modo_simple.html
+  - ajetrez_modo_simple_online_FINAL_abs.html
+  - main/ajetrez_modo_amenaza_online_FINAL_abs.html
+  - main/ajetrez_modo_guerra_online_FINAL_abs.html
+  - main/ajetrez_modo_simple_online_FINAL_abs.html
+  - main/web/online.js
+  - main/web/online_attach_amenaza.js
+  - main/web/online_attach_simple.js
+  - web/online.js
+  - web/online_attach_amenaza.js
+  - web/online_attach_simple.js
+
+
+Second pass adjustments to use nearest web/ directory:
+  - ajetrez_modo_amenaza.html
+  - ajetrez_modo_amenaza_online_FINAL_abs.html
+  - ajetrez_modo_guerra.html
+  - ajetrez_modo_guerra_online_FINAL_abs.html
+  - ajetrez_modo_simple.html
+  - ajetrez_modo_simple_online_FINAL_abs.html
+  - main/ajetrez_modo_amenaza_online_FINAL_abs.html
+  - main/ajetrez_modo_guerra_online_FINAL_abs.html
+  - main/ajetrez_modo_simple_online_FINAL_abs.html
+  - main/web/online_attach_amenaza.js
+  - main/web/online_attach_simple.js
+  - web/online_attach_amenaza.js
+  - web/online_attach_simple.js
+
+Patched main/index.html links from '/AjetrezFinal3.0-main/*' to root-level paths.
