@@ -30,7 +30,7 @@
   async function ensureSvc() {
     if (svc) return svc;
     try {
-      const mod = await import('./web/online.js');
+      const mod = await import('./online.js');
       svc = await mod.initOnline({
         supabaseUrl: SUPABASE_URL,
         supabaseAnonKey: SUPABASE_ANON_KEY,
