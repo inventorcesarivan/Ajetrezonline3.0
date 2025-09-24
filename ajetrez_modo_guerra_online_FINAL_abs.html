@@ -95,8 +95,6 @@
 
   #btnRestartBR{ position: static; }
   #btnRestartBR:hover{ background:#222; }
-
-  Hpx;
     bottom: calc(10px - var(--square) - 3mm);
     appearance:none; border:none; border-radius:999px;
     padding: 8px 12px; font-weight:800; cursor:pointer;
@@ -116,7 +114,8 @@
     position:absolute;
     left: calc(var(--square) * 6);
     top: calc(var(--square) * -1);
-    width: calc(var(--square) * 12)
+    width: calc(var(--square) * 12);
+
     background:#fff; border-radius: 16px;
     box-shadow: 0 12px 32px rgba(0,0,0,.25);
     display:none; flex-direction:column; overflow:hidden;
@@ -3506,16 +3505,16 @@ function legalMovesFor(vis, board, offs, r, c, color, epTarget){
       const right = (()=>{ let cc=c+1; while(cc<8){ const q=vis[r][cc]; if(q) return {q, col:cc}; cc++; } return null; })();
       if(right && right.q.type==='R' && right.q.color===color && hasNotMoved(right.q)){
         if(canUse(c+1) && canUse(c+2)){
-          if(safeAfter(c+1,null) && safeAfter(c+2,{castle:'K',rookFrom:{r:r,c:right.col},rookTo:{r:r,c:c+1}})){
-            out.push([r,c+2,{castle:'K',rookFrom:{r:r,c:right.col},rookTo:{r:r,c:c+1}},false]);
+          if(safeAfter(c+1,null) && safeAfter(c+2,{castle:'K',rookFrom:{r:r,c:right.col},rookTo:{r:r,c:c+1})){
+            out.push([r,c+2,{castle:'K',rookFrom:{r:r,c:right.col},rookTo:{r:r,c:c+1},false]);
           }
         }
       }
       const left = (()=>{ let cc=c-1; while(cc>=0){ const q=vis[r][cc]; if(q) return {q, col:cc}; cc--; } return null; })();
       if(left && left.q.type==='R' && left.q.color===color && hasNotMoved(left.q)){
         if(canUse(c-1) && canUse(c-2) && canUse(c-3)){
-          if(safeAfter(c-1,null) && safeAfter(c-2,{castle:'Q',rookFrom:{r:r,c:left.col},rookTo:{r:r,c:c-1}})){
-            out.push([r,c-2,{castle:'Q',rookFrom:{r:r,c:left.col},rookTo:{r:r,c:c-1}},false]);
+          if(safeAfter(c-1,null) && safeAfter(c-2,{castle:'Q',rookFrom:{r:r,c:left.col},rookTo:{r:r,c:c-1})){
+            out.push([r,c-2,{castle:'Q',rookFrom:{r:r,c:left.col},rookTo:{r:r,c:c-1},false]);
           }
         }
       }
@@ -3668,8 +3667,8 @@ document.addEventListener('keydown', (e)=>{
 });
 setGameMode(gameMode, 'Player vs player (local)');
 
-function emitTurnChange(){ window.dispatchEvent(new CustomEvent('aj:turn:change',{detail:{turn}})); }
-function emitTurnBlock(info){ window.dispatchEvent(new CustomEvent('aj:turn:block',{detail:info||{}})); }
+function emitTurnChange(){ window.dispatchEvent(new CustomEvent('aj:turn:change',{detail:{turn})); }
+function emitTurnBlock(info){ window.dispatchEvent(new CustomEvent('aj:turn:block',{detail:info||{})); }
 
 function showChoose(row){
   applyShiftCtrlLockVisual();
@@ -4901,7 +4900,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
       try{ window.__BOT_SCHEDULED__=false; window.__BOT_SCHEDULED_SIDE__=null; }catch(_){ }
       const el = document.getElementById('startOverlay');
       if(el){ el.style.display = 'flex'; 
-      try{ if(window.BOT_UI && typeof window.BOT_UI.cancelAll==='function'){ window.BOT_UI.cancelAll(); } }catch(_){ }}
+      try{ if(window.BOT_UI && typeof window.BOT_UI.cancelAll==='function'){ window.BOT_UI.cancelAll(); } }catch(_){ }
       window.GAME_STARTED = false;
     }
     function hideStartOverlay(){
@@ -5389,7 +5388,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
       if(v2.length) return v2;
       const v1 = JSON.parse(localStorage.getItem(LS_KEY_V1)||'[]')||[];
       if(!v1.length) return [];
-      const migrated = v1.map(x=>({...x, history:[], meta:{migrated:true}}));
+      const migrated = v1.map(x=>({...x, history:[], meta:{migrated:true}));
       localStorage.setItem(LS_KEY, JSON.stringify(migrated));
       return migrated;
     }catch(_){ return []; }
@@ -5684,7 +5683,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
     if(!t) return;
     var th = t.querySelector('thead tr');
     if(!th) return;
-    var has = Array.from(th.children).some(function(el){ return (el.textContent||'').trim().toLowerCase()==='acciones'; });
+    var has = Array.from(th.children).some(function(el){ return (el.textContent||'').trim())==='acciones'; });
     if(!has){
       var thAcc = document.createElement('th');
       thAcc.textContent = 'Acciones';
@@ -5986,7 +5985,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
     if(!t) return {glyph:'', col:'#222'};
     var mapW = {p:'♙', r:'♖', n:'♘', b:'♗', q:'♕', k:'♔', m:'♗', w:'♗', j:'♘', a:'♖', s:'♙'};
     var mapB = {p:'♟', r:'♜', n:'♞', b:'♝', q:'♛', k:'♚', m:'♝', w:'♝', j:'♞', a:'♜', s:'♟'};
-    t = (''+t).toLowerCase();
+    t = (''+t));
     var glyph = (color==='w')? (mapW[t]||'') : (mapB[t]||'');
     return {glyph:glyph, col: (color==='w')?'#111':'#111'};
   }
@@ -6104,7 +6103,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
   function findOnlineButton(){
     const scope = getModesScope();
     const btns = qsa('button, .btn, [role="button"]', scope);
-    return btns.find(b => (b.textContent||'').trim().toLowerCase().includes('modo online'));
+    return btns.find(b => (b.textContent||'').trim()).includes('modo online'));
   }
   function findModeButtons(){
     const scope = getModesScope();
@@ -6205,7 +6204,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
   function findOnlineBtn(){
     const scope = qs('#tab-modos, #modos, .tab-modos, [data-tab="modos"]') || document;
     const btns = qsa('button, .btn, [role="button"]', scope);
-    return btns.find(b => (b.textContent||'').toLowerCase().includes('modo online'));
+    return btns.find(b => (b.textContent||'')).includes('modo online'));
   }
 
   function squareSize(){
@@ -6474,7 +6473,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
   if(modeDD){
     modeDD.addEventListener('click', function(e){
       const item = e.target.closest('.dd-item'); if(!item) return;
-      const mode = (item.getAttribute('data-mode')||'').toLowerCase();
+      const mode = (item.getAttribute('data-mode')||''));
       if(mode==='bot' || mode==='bot-vs-bot'){
         e.preventDefault(); e.stopPropagation();
         // close the dropdown
@@ -6626,7 +6625,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
   // Start on pressing "Comenzar partida" (overlay)
   document.addEventListener('click', (e)=>{
     if(e.target && e.target.id === 'btnStartGame'){
-      setTimeout(()=>{ try{ start(); }catch(_){}} , 10);
+      setTimeout(()=>{ try{ start(); }catch(_){} , 10);
     }
   }, true);
 
@@ -6997,7 +6996,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
       var pill = $('#modeGroup .mode-indicator') || $('.mode-indicator');
       if(!pill) return;
       var base = (pill.textContent||'').replace(/\s*\(.*\)\s*$/, '').trim();
-      var mode = (window.GAME_MODE || base || '').toLowerCase();
+      var mode = (window.GAME_MODE || base || ''));
       if(mode.indexOf('bot vs bot') !== -1 || /bot\s*vs\s*bot/i.test(base)){
         var w = stored('ajetrez.bot.difficulty.white') || stored('ajetrez.bot.difficulty') || '';
         var b = stored('ajetrez.bot.difficulty.black') || stored('ajetrez.bot.difficulty') || '';
@@ -7088,7 +7087,7 @@ window.AJ_RULES.legalShift = function(row, target, boardRef, offsRef){
   }
   function currentKind(){
     var pill = $('#modeGroup .mode-indicator') || $('.mode-indicator');
-    var t = (pill && pill.textContent || '').toLowerCase();
+    var t = (pill && pill.textContent || ''));
     if(t.indexOf('bot vs bot') !== -1) return 'bvb';
     if(t.indexOf('player vs bot') !== -1 || t.indexOf('versus bot') !== -1) return 'pvb';
     return '';
@@ -7197,7 +7196,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
   function fmtDate(ts){ const d=new Date(ts); return d.toLocaleString(); }
 
   function refreshList(){
-    const q = ($('#reg-q')?.value || '').toLowerCase();
+    const q = ($('#reg-q')?.value || ''));
     const md = $('#reg-mode')?.value || '';
     const rs = $('#reg-result')?.value || '';
     const list = $('#reg-list'); if(!list) return;
@@ -7206,7 +7205,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
     const filtered = all.filter(g => {
       if(md && (g.mode||'')!==md) return false;
       if(rs && (g.result||'')!==rs) return false;
-      const txt = [g.meta?.title, g.result, g.mode, (g.tags||[]).join(' '), g.meta?.botLevel, g.meta?.opponent].join(' ').toLowerCase();
+      const txt = [g.meta?.title, g.result, g.mode, (g.tags||[]).join(' '), g.meta?.botLevel, g.meta?.opponent].join(' '));
       if(q && txt.indexOf(q)===-1) return false; return true;
     });
     filtered.forEach(g => {
@@ -7425,7 +7424,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
   function saveStored(mode){
     if(!selSingle || !selW || !selB) return;
     try{
-      if((mode||'').toLowerCase()==='bot-vs-bot'){
+      if((mode||''))==='bot-vs-bot'){
         localStorage.setItem('ajetrez.bot.difficulty.white', selW.value);
         localStorage.setItem('ajetrez.bot.difficulty.black', selB.value);
       }else{ // 'bot' or default
@@ -7448,7 +7447,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
   // Public open function
   window.openBotChooser = function(mode){
     try{ if(!panel || !backdrop){ return; } }catch(_){ return; }
-    var m = (mode || window.GAME_MODE || '').toLowerCase();
+    var m = (mode || window.GAME_MODE || ''));
     // Store pending mode so other patches (applyBotChoice) can use it
     try{ window.__AJ_LAST_PENDING_MODE__ = m; }catch(_){}
 
@@ -7483,7 +7482,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
   }
   if(btnApply){
     btnApply.addEventListener('click', function(){
-      var m = (window.__AJ_LAST_PENDING_MODE__ || window.GAME_MODE || 'bot').toLowerCase();
+      var m = (window.__AJ_LAST_PENDING_MODE__ || window.GAME_MODE || 'bot'));
       saveStored(m);
       applyLabels();
       closeChooser();
@@ -7513,7 +7512,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
   function stored(key){ try{ return localStorage.getItem(key); }catch(_){ return null; } }
 
   function modeToShort(m){
-    m = (m||'').toLowerCase();
+    m = (m||''));
     if(m==='bot') return 'pvb';
     if(m==='bot-vs-bot') return 'bvb';
     if(m==='pvp-local' || m==='pvp') return 'pvp';
@@ -7615,7 +7614,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
   if(window.__AJ_REG_SAVE_BRIDGED__) return; window.__AJ_REG_SAVE_BRIDGED__ = true;
   function currentMeta(){
     try{
-      var gm = (window.GAME_MODE||'pvp-local').toLowerCase();
+      var gm = (window.GAME_MODE||'pvp-local'));
       var short = (gm==='bot' ? 'pvb' : (gm==='bot-vs-bot' ? 'bvb' : 'pvp'));
       var meta = { mode: short, title: 'Partida ' + new Date().toLocaleString() };
       if(short==='pvb'){
@@ -7890,7 +7889,7 @@ const g = window.__AJ_CURRENT_GAME__; if(!g) return;
   panel.addEventListener('click', function(e){
     var gmBtn = e.target && e.target.closest && e.target.closest('[data-gmode]');
     if(!gmBtn || !panel.contains(gmBtn)) return;
-    var gm = (gmBtn.getAttribute('data-gmode')||'').toLowerCase();
+    var gm = (gmBtn.getAttribute('data-gmode')||''));
     if(gm==='bot' || gm==='bot-vs-bot'){
       if(typeof window.openBotChooser === 'function'){ 
         e.preventDefault();
@@ -7920,9 +7919,9 @@ function setHelp(mode){
   try{
     var box = document.getElementById('modeHelp'); if(!box) return;
     var body = box.querySelector('.body') || box;
-    var key = (mode||'').toLowerCase();
+    var key = (mode||''));
     var msg = HELP[key];
-    if(!msg && window.GAME_MODE){ msg = HELP[(window.GAME_MODE||'').toLowerCase()] || (body.textContent||''); }
+    if(!msg && window.GAME_MODE){ msg = HELP[(window.GAME_MODE||''))] || (body.textContent||''); }
     if(!msg) return;
     if(key==='online'){
       var parts = String(msg).split(/\n\s*\n/);
@@ -7961,7 +7960,7 @@ function setHelp(mode){
   document.addEventListener('click', function(e){
     var b = e.target && e.target.closest && e.target.closest('[data-gmode]');
     if(!b) return;
-    var gm = (b.getAttribute('data-gmode')||'').toLowerCase();
+    var gm = (b.getAttribute('data-gmode')||''));
     if(gm){ setHelp(gm); }
   }, true);
 
@@ -8011,7 +8010,7 @@ function setHelp(mode){
   panel.addEventListener('click', function(e){
     var b = e.target && e.target.closest && e.target.closest('.btn.mode[data-gmode]');
     if(!b || !panel.contains(b)) return;
-    var gm = (b.getAttribute('data-gmode')||'').toLowerCase();
+    var gm = (b.getAttribute('data-gmode')||''));
     applyActive(gm);
   }, false);
   // Wrap setGameMode to also update active state
@@ -8019,7 +8018,7 @@ function setHelp(mode){
     var g = window; var orig = g.setGameMode;
     g.setGameMode = function(mode,label){
       var r = orig ? orig.apply(this, arguments) : undefined;
-      try{ applyActive((mode||'').toLowerCase()); }catch(_){}
+      try{ applyActive((mode||''))); }catch(_){}
       return r;
     };
   })();
@@ -8027,10 +8026,10 @@ function setHelp(mode){
   document.addEventListener('click', function(e){
     var btn = e.target && e.target.closest && e.target.closest('#btnMegaMenu');
     if(!btn) return;
-    setTimeout(function(){ applyActive((window.GAME_MODE||'').toLowerCase()); },0);
+    setTimeout(function(){ applyActive((window.GAME_MODE||''))); },0);
   }, true);
   // Also on load
-  setTimeout(function(){ applyActive((window.GAME_MODE||'').toLowerCase()); }, 0);
+  setTimeout(function(){ applyActive((window.GAME_MODE||''))); }, 0);
 })();
 </script><script id="mode-help-sync">
 (function(){
@@ -8084,7 +8083,7 @@ function setHelp(mode){
     window.setGameMode = function(mode, label){
       var res = _orig ? _orig.apply(this, arguments) : undefined;
       try{
-        var m = (mode||'').toLowerCase();
+        var m = (mode||''));
         setHelp(m);
         if(m !== 'online'){ clearOnlineNotice(); }
       }catch(_){}
@@ -8096,7 +8095,7 @@ function setHelp(mode){
   document.addEventListener('click', function(e){
     var btn = e.target && e.target.closest && e.target.closest('[data-gmode]');
     if(!btn) return;
-    var m = (btn.getAttribute('data-gmode')||'').toLowerCase();
+    var m = (btn.getAttribute('data-gmode')||''));
     // Dejar que otros handlers corran y luego sincronizar
     setTimeout(function(){
       try{
@@ -8109,7 +8108,7 @@ function setHelp(mode){
   // Al abrir el panel (o al cargar), reflejar el modo actual
   setTimeout(function(){
     try{
-      var cur = (window.GAME_MODE||'pvp-local').toLowerCase();
+      var cur = (window.GAME_MODE||'pvp-local'));
       setHelp(cur);
       if(cur !== 'online'){ clearOnlineNotice(); }
     }catch(_){}
@@ -8120,7 +8119,7 @@ function setHelp(mode){
   if(window.__AJ_ONLINE_NOTICE_TOGGLE__) return; window.__AJ_ONLINE_NOTICE_TOGGLE__=true;
   function hideIfNotOnline(mode){
     try{
-      if((mode||'').toLowerCase() !== 'online'){
+      if((mode||'')) !== 'online'){
         var n = document.getElementById('aj-online-notice');
         if(n && n.parentNode){ n.parentNode.removeChild(n); }
       }
@@ -8129,7 +8128,7 @@ function setHelp(mode){
   document.addEventListener('click', function(e){
     var btn = e.target && e.target.closest && e.target.closest('[data-gmode]');
     if(!btn) return;
-    var m = (btn.getAttribute('data-gmode')||'').toLowerCase();
+    var m = (btn.getAttribute('data-gmode')||''));
     setTimeout(function(){ hideIfNotOnline(m); }, 0);
   }, true);
   // Al abrir el panel
@@ -8854,7 +8853,7 @@ div[style="height:var(--toolbar-gap)"]{
     script:[], index:0, playing:false, speed:700, abort:false,
     load(arr){ this.script = Array.isArray(arr)? arr.slice():[]; this.index=0; },
     setSpeed(ms){ this.speed = clamp(ms|0,0,60000); },
-    stop({resetToStart=true}={}){ this.abort=true; this.playing=false; if(resetToStart){ try{ if(typeof restartGame==='function') restartGame(); }catch(_){}} },
+    stop({resetToStart=true}={}){ this.abort=true; this.playing=false; if(resetToStart){ try{ if(typeof restartGame==='function') restartGame(); }catch(_){} },
     pause(){ this.playing=false; },
     resume(){ if(!this.playing){ this.playing=true; this.play(); } },
     async play(){
@@ -9218,19 +9217,19 @@ catch(_){}
         window.__CLOCK_PAUSED__ = true;
       }catch(_){}
       try{ ol.showPane('Reproduciendo…');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; }})(); ol.hideStartButtons(true); }catch(_){}
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; })(); ol.hideStartButtons(true); }catch(_){}
       try{ document.body.classList.add('replaying'); }catch(_){}
       await _play();
       // Al finalizar, mantener bloqueado y mostrar mensaje final
       try{ ol.showPane('Reproducción finalizada');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='28px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; }})(); }catch(_){}
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='28px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; })(); }catch(_){}
       try{ document.body.classList.add('replaying-finished'); }catch(_){}
       // Nota: no reactivamos controles aquí; salida es manual via ol.exit()
     };
     Bot.stop = function(opts){
       // Detener pero mantener bloqueado hasta salida manual
       try{ ol.showPane('Reproducción detenida');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='26px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; }})(); ol.hideStartButtons(true); }catch(_){}
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='26px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; })(); ol.hideStartButtons(true); }catch(_){}
       try{ document.body.classList.add('replaying-stopped'); }catch(_){}
       return _stop(opts);
     };
@@ -9240,7 +9239,7 @@ catch(_){}
     };
     Bot.resume = function(){
       try{ ol.showPane('Reproduciendo…');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; }})(); }catch(_){}
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; })(); }catch(_){}
       try{
         if(typeof setBotEnabled==='function') setBotEnabled(false);
         window.__CLOCK_PAUSED__ = true;
@@ -9371,24 +9370,24 @@ catch(_){}
       }catch(_){}
       ensureClose();
       showPane('Reproduciendo…');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; }})(); hideStartButtons(true);
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; })(); hideStartButtons(true);
       await _play();
       // Keep blocked; message guides to close
       showPane('Reproducción finalizada');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='28px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; }})();
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='28px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; })();
       Bot.__lastEnded = true;
     };
     Bot.stop = function(opts){
       ensureClose();
       showPane('Reproducción detenida');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='26px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; }})();
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#dc2626'; L.style.fontSize='26px'; L.style.fontWeight='900'; L.style.webkitTextStroke='1.5px #ffffff'; L.style.textShadow='-1px 0 #fff, 1px 0 #fff, 0 -1px #fff, 0 1px #fff'; })();
       return _stop(opts);
     };
     Bot.pause = function(){ return _pause(); };
     Bot.resume = function(){
       ensureClose();
       showPane('Reproduciendo…');
-      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; }})();
+      (function(){var L=document.getElementById('aj-replay-label'); if(L){ L.style.color='#ffffff'; L.style.fontSize='20px'; L.style.webkitTextStroke='0px transparent'; L.style.textShadow='none'; })();
       try{
         if(typeof setBotEnabled==='function') setBotEnabled(false);
         window.__CLOCK_PAUSED__ = true;
@@ -9487,7 +9486,7 @@ catch(_){}
             // show a mild toast via console
             console.log('Guion cargado en reproductor', {total: script.length});
             // Trigger UI refresh for top bar if available:
-            document.dispatchEvent(new CustomEvent('regv2:scriptLoaded', {detail:{total: script.length}}));
+            document.dispatchEvent(new CustomEvent('regv2:scriptLoaded', {detail:{total: script.length}));
           }catch(e){ console.error(e); }
         });
       }
@@ -9654,11 +9653,11 @@ catch(_){}
   function humanMode(m){ if(!m) return ''; const map={'pvp-local':'Player vs Player','bot-vs-bot':'Bot vs Bot','pve':'Player vs Bot'}; return map[m]||m; }
   function botLabel(meta){ try{ if(!meta||!meta.botLevel) return ''; const bl=meta.botLevel; return (typeof bl==='string')? bl : ('W:'+bl.white+' B:'+bl.black);}catch(_){ return ''; } }
   function moveText(m){ if(!m) return ''; if(typeof m==='string') return m; if(m.san) return m.san; if(m.uci) return m.uci;
-    if(m.from&&m.to) return m.from+'-'+m.to+(m.promotion? '='+m.promotion:''); if(m.f&&m.t){ try{const f='abcdefgh'; return f[m.f.c]+(8-m.f.r)+'-'+f[m.t.c]+(8-m.t.r);}catch(_){}} return ''; }
+    if(m.from&&m.to) return m.from+'-'+m.to+(m.promotion? '='+m.promotion:''); if(m.f&&m.t){ try{const f='abcdefgh'; return f[m.f.c]+(8-m.f.r)+'-'+f[m.t.c]+(8-m.t.r);}catch(_){} return ''; }
   function m2uci(m){ if(!m) return ''; if(typeof m==='string') return m; if(m.uci) return m.uci;
-    if(m.from&&m.to) return m.from+m.to+(m.promotion||''); if(m.f&&m.t){ try{const f='abcdefgh'; return f[m.f.c]+(8-m.f.r)+f[m.t.c]+(8-m.t.r)+(m.promotion||'');}catch(_){}} return ''; }
+    if(m.from&&m.to) return m.from+m.to+(m.promotion||''); if(m.f&&m.t){ try{const f='abcdefgh'; return f[m.f.c]+(8-m.f.r)+f[m.t.c]+(8-m.t.r)+(m.promotion||'');}catch(_){} return ''; }
   function isUci(s){ return typeof s==='string' && /^[a-h][1-8][a-h][1-8][qrbn]?$/.test(s); }
-  function sanitizeUciTokens(tokens){ var out=[], prev=''; for(var i=0;i<(tokens||[]).length;i++){ var t=(tokens[i]||'').trim().toLowerCase(); if(!isUci(t)) continue; if(t===prev) continue; out.push(t); prev=t; } return out; }
+  function sanitizeUciTokens(tokens){ var out=[], prev=''; for(var i=0;i<(tokens||[]).length;i++){ var t=(tokens[i]||'').trim()); if(!isUci(t)) continue; if(t===prev) continue; out.push(t); prev=t; } return out; }
   function normalizeGameToUCI(g){ if(!g) return g; const ms=Array.isArray(g.moves)?g.moves:[]; g.moves=sanitizeUciTokens(ms.map(m2uci)); g.format='uci'; return g; }
   function normalizeAllToUCI(){ try{ let all = loadAll(); if(!all.length) return; let ch=false; for(let i=0;i<all.length;i++){ const before=all[i].moves; normalizeGameToUCI(all[i]); if(before!==all[i].moves) ch=true; } if(ch) saveAll(all); }catch(_){} }
 
@@ -9870,8 +9869,8 @@ catch(_){}
       if(!__rv2Current) return;
       const d=(e&&e.detail)||e||{}; const u=m2uci(d)||d.uci||''; if(!u) return;
       const last=__rv2Current.moves.length? __rv2Current.moves[__rv2Current.moves.length-1] : '';
-      if(String(u).toLowerCase()===String(last).toLowerCase()) return;
-      __rv2Current.moves.push(String(u).toLowerCase());
+      if(String(u))===String(last))) return;
+      __rv2Current.moves.push(String(u)));
       draftSaveSoon();
     }catch(_){}
   }, true);
@@ -9911,20 +9910,20 @@ catch(_){}
     var byId = document.getElementById('regv2-play');
     if(byId) return byId;
     var btn = all('button').find(function(b){
-      var t=(b.textContent||'').trim().toLowerCase();
+      var t=(b.textContent||'').trim());
       return t.indexOf('reproducir en tablero')!==-1 || t==='reproducir';
     });
     return btn || null;
   }
   function findDemoButton(root){
     return all('button', root).find(function(b){
-      return ((b.textContent||'').trim().toLowerCase().indexOf('cargar demo')!==-1);
+      return ((b.textContent||'').trim()).indexOf('cargar demo')!==-1);
     }) || null;
   }
   function findSpeedGroup(root){
     var label = all('*', root).find(function(el){
       return el && (el.tagName==='LABEL' || el.tagName==='SPAN' || el.tagName==='DIV') &&
-             ((el.textContent||'').trim().toLowerCase().indexOf('velocidad')!==-1) &&
+             ((el.textContent||'').trim()).indexOf('velocidad')!==-1) &&
              (el.querySelector('select') || el.nextElementSibling && el.nextElementSibling.tagName==='SELECT');
     });
     if(label){
@@ -9949,7 +9948,7 @@ catch(_){}
     if(!root) root = document;
     texts = texts.map(function(x){ return x.toLowerCase(); });
     all('button, .btn', root).forEach(function(b){
-      var t=(b.textContent||'').trim().toLowerCase();
+      var t=(b.textContent||'').trim());
       if(texts.some(function(s){ return t.indexOf(s)!==-1; })){
         b.style.display='none';
         var row = b.closest('div'); if(row) row.classList.add('rv2-collapsed-row');
@@ -10026,7 +10025,7 @@ catch(_){}
       try{
         var cs = getComputedStyle(divs[i]);
         var w = divs[i].offsetWidth, h = divs[i].offsetHeight;
-        if(w>200 && Math.abs(w-h) < 6 && (divs[i].className||'').toLowerCase().indexOf('board')!==-1){ return divs[i]; }
+        if(w>200 && Math.abs(w-h) < 6 && (divs[i].className||'')).indexOf('board')!==-1){ return divs[i]; }
       }catch(_){}
     }
     return null;
@@ -11379,7 +11378,7 @@ function showToast(){
     // Busca candidatos de títulos dentro del grupo y remueve los que contengan "apariencia" y "zonas"
     var candidates = $all('h1,h2,h3,h4,h5,h6,label,legend,div,span,p', group);
     candidates.forEach(function(n){
-      var t = (n.textContent || '').toLowerCase().trim();
+      var t = (n.textContent || '')).trim();
       if(t && t.includes('apariencia') && t.includes('zona')){
         n.remove();
       }
@@ -11395,7 +11394,7 @@ function showToast(){
     if(!headerReset){
       // Busca algún botón que diga Restablecer en todo el doc
       var candidate = $all('button, .btn').find(function(b){
-        var t = (b.textContent || '').trim().toLowerCase();
+        var t = (b.textContent || '').trim());
         return t.startsWith('restablecer');
       });
       if(candidate){
@@ -11413,7 +11412,7 @@ function showToast(){
     });
     // También cualquier botón con el texto "Restablecer" que no esté en headerRight
     $all('button, .btn').forEach(function(b){
-      var t = (b.textContent || '').trim().toLowerCase();
+      var t = (b.textContent || '').trim());
       if(t.startsWith('restablecer') && b.closest('.zf-right') == null){
         if(b !== headerReset) b.remove();
       }
@@ -11534,7 +11533,7 @@ function showToast(){
     // 1) Buscamos por label con el texto "Estilo de piezas"
     var labels = $all('label', tab);
     for(var i=0;i<labels.length;i++){
-      var t = (labels[i].textContent||'').trim().toLowerCase();
+      var t = (labels[i].textContent||'').trim());
       if(t.includes('estilo') && t.includes('pieza')){
         var id = labels[i].getAttribute('for');
         if(id){
@@ -11583,7 +11582,7 @@ function showToast(){
     if(!tab) return null;
     var hs = $all('h1,h2,h3', tab);
     for(var i=0;i<hs.length;i++){
-      var t = (hs[i].textContent||'').trim().toLowerCase();
+      var t = (hs[i].textContent||'').trim());
       if(t.includes('personalización') && t.includes('juego')) return hs[i];
       if(t.includes('personalizacion') && t.includes('juego')) return hs[i];
     }
@@ -11598,14 +11597,14 @@ function showToast(){
     var block = null;
     for(var i=0;i<candidates.length;i++){
       var n = candidates[i];
-      var txt = (n.textContent||'').toLowerCase();
+      var txt = (n.textContent||''));
       if(txt.includes('estilo visual')){ block = n; break; }
     }
     if(!block) return null;
 
     // Buscar contenedor con botones Día/Noche/etc.
     var buttons = $all('button', block).filter(function(b){
-      var t = (b.textContent||'').trim().toLowerCase();
+      var t = (b.textContent||'').trim());
       return ['día','dia','noche','madera','arena','pizarra','oliva'].includes(t);
     });
     if(!buttons.length) return null;
@@ -11673,7 +11672,7 @@ function showToast(){
     if(!tab) return null;
     var labels = $all('label', tab);
     for(var i=0;i<labels.length;i++){
-      var t = (labels[i].textContent||'').trim().toLowerCase();
+      var t = (labels[i].textContent||'').trim());
       if(t.includes('estilo') && t.includes('pieza')){
         var sel = null;
         var id = labels[i].getAttribute('for');
@@ -11761,7 +11760,7 @@ function showToast(){
     if(!tab) return null;
     var labels = $all('label', tab);
     for(var i=0;i<labels.length;i++){
-      var t = (labels[i].textContent||'').trim().toLowerCase();
+      var t = (labels[i].textContent||'').trim());
       if(t.includes('estilo') && t.includes('pieza')){
         var sel = null;
         var id = labels[i].getAttribute('for');
@@ -11800,7 +11799,7 @@ function showToast(){
       // fallback: buscar por texto "Brillo y opacidad por zonas"
       var blocks = $all('*', tab);
       for(var i=0;i<blocks.length;i++){
-        var txt = (blocks[i].textContent||'').toLowerCase();
+        var txt = (blocks[i].textContent||''));
         if(txt.includes('brillo y opacidad por zonas')){ zonesCard = blocks[i]; break; }
       }
     }
@@ -11875,7 +11874,7 @@ function showToast(){
     // Buscar un nodo que contenga "Estilo visual" (ignorando mayúsculas/acento)
     var nodes = $all('h1,h2,h3,h4,h5,h6,label,div,span,p', tab);
     for(var i=0;i<nodes.length;i++){
-      var t = (nodes[i].textContent||'').trim().toLowerCase();
+      var t = (nodes[i].textContent||'').trim());
       if(t === 'estilo visual' || t.startsWith('estilo visual')){
         return nodes[i];
       }
@@ -11949,7 +11948,7 @@ function showToast(){
     if(!tab) return null;
     var hs = $all('h1,h2,h3', tab);
     for(var i=0;i<hs.length;i++){
-      var t = (hs[i].textContent||'').trim().toLowerCase();
+      var t = (hs[i].textContent||'').trim());
       if((t.includes('personalización') || t.includes('personalizacion')) && t.includes('juego')) return hs[i];
     }
     return null;
@@ -11990,7 +11989,7 @@ function showToast(){
     if(!tab) return null;
     var labels = $all('label', tab);
     for(var i=0;i<labels.length;i++){
-      var t = (labels[i].textContent||'').trim().toLowerCase();
+      var t = (labels[i].textContent||'').trim());
       if(t.includes('estilo') && t.includes('pieza')){
         var sel = null;
         var id = labels[i].getAttribute('for');
@@ -12116,7 +12115,7 @@ function showToast(){
     // buscar label asociado por for= o textual
     var labels = $all('label', tab);
     for(var i=0;i<labels.length;i++){
-      var t = (labels[i].textContent||'').trim().toLowerCase();
+      var t = (labels[i].textContent||'').trim());
       if(t.includes('estilo') && t.includes('pieza')){ label = labels[i]; break; }
     }
     if(!label){
@@ -12137,7 +12136,7 @@ function showToast(){
     // Deduplicar otros labels similares fuera del host
     $all('label', tab).forEach(function(l){
       if(l !== label){
-        var t = (l.textContent||'').trim().toLowerCase();
+        var t = (l.textContent||'').trim());
         if(t.includes('estilo') && t.includes('pieza')){
           // si no contiene directamente un control distinto, remover
           if(!l.control || l.control === sel){
@@ -12241,7 +12240,7 @@ function showToast(){
     if(topRight){
       var sel = topRight.querySelector('select.aj-piece-style-select') || topRight.querySelector('select');
       var labels = $all('label', topRight);
-      var label = labels.find(function(l){ return (l.textContent||'').toLowerCase().includes('pieza'); });
+      var label = labels.find(function(l){ return (l.textContent||'')).includes('pieza'); });
       if(!label){
         label = document.createElement('label');
         label.textContent = 'Estilo de piezas';
@@ -12605,7 +12604,7 @@ function showToast(){
 function showPromotionDialog(color, onChoose){
   try{
     const overlay = document.getElementById('promoOverlay');
-    /*promoFSRootPatch*/try{var __fsroot=document.fullscreenElement||document.getElementById('fsRoot')||document.body;if(overlay&&overlay.parentElement!==__fsroot){__fsroot.appendChild(overlay);}}catch(_){}const cont = document.getElementById('promoChoices');
+    /*promoFSRootPatch*/try{var __fsroot=document.fullscreenElement||document.getElementById('fsRoot')||document.body;if(overlay&&overlay.parentElement!==__fsroot){__fsroot.appendChild(overlay);}catch(_){}const cont = document.getElementById('promoChoices');
     cont.innerHTML='';
     const order = ['Q','R','B','N'];
     order.forEach(function(t){
@@ -12615,7 +12614,7 @@ function showPromotionDialog(color, onChoose){
       try{ url = PIECE_SPRITES[color] && PIECE_SPRITES[color][t]; }catch(_){}
       if(!url){
         // fallback unicode
-        const map = {w:{Q:'♕',R:'♖',B:'♗',N:'♘'}, b:{Q:'♛',R:'♜',B:'♝',N:'♞'}};
+        const map = {w:{Q:'♕',R:'♖',B:'♗',N:'♘'}, b:{Q:'♛',R:'♜',B:'♝',N:'♞'};
         btn.textContent = (map[color]||map.w)[t];
         btn.style.fontSize='40px';
         btn.style.lineHeight='48px';
@@ -13096,8 +13095,8 @@ function showVeteranBanner(color){
     if(typeof orig === 'function'){
       window.playMove = function(from,to,special,capturesKing){
         try{
-          const promo = (special && special.promotion) ? String(special.promotion).toLowerCase() : '';
-          const uci = (algebra(from.r,from.c)+algebra(to.r,to.c)+promo).toLowerCase();
+          const promo = (special && special.promotion) ? String(special.promotion)) : '';
+          const uci = (algebra(from.r,from.c)+algebra(to.r,to.c)+promo));
           (window.AJ_BOOK.history||(window.AJ_BOOK.history=[])).push(uci);
         }catch(_){}
         return orig.apply(this, arguments);
@@ -13119,8 +13118,8 @@ function showVeteranBanner(color){
             const legals = genMoves(board, offsets, color, epTarget);
             const legalUCIs = new Map();
             for(const m of legals){
-              const promo = (m.special && m.special.promotion) ? String(m.special.promotion).toLowerCase() : '';
-              const uci = (algebra(m.from.r,m.from.c)+algebra(m.to.r,m.to.c)+promo).toLowerCase();
+              const promo = (m.special && m.special.promotion) ? String(m.special.promotion)) : '';
+              const uci = (algebra(m.from.r,m.from.c)+algebra(m.to.r,m.to.c)+promo));
               legalUCIs.set(uci, m);
             }
             const pool = candidates.filter(c => legalUCIs.has(c.uci));
@@ -13140,7 +13139,8 @@ function showVeteranBanner(color){
 </script>
 
 
-<script type="module">
+<script type="module">try {
+
   // HARDENED: lazy init on click, muestra estado, y evita que un error bloquee el botón.
   const BTN_ID = 'btn-online-war';
   const STATUS_ID = 'online-war-status';
@@ -13194,6 +13194,12 @@ function showVeteranBanner(color){
   window.onLocalMove = (move) => online?.send({ kind: 'move', payload: move });
   window.onSectionShift = (shift) => online?.send({ kind: 'shift', payload: shift });
   window.onPromote = (prom) => online?.send({ kind: 'promote', payload: prom });
+
+} catch (e) {
+  console.error('ONLINE INIT ERROR →', e);
+  const el = document.querySelector('#online-simple-status, #online-amenaza-status, #online-guerra-status');
+  if (el) el.textContent = '❌ Error de conexión: ' + (e?.message || e);
+}
 </script>
 
 </body>
